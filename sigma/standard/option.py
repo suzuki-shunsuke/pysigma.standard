@@ -1,4 +1,4 @@
-from sigma.core import option
+from sigma.core import option, Option
 
 from .error import TooLongError, TooShortError, InvalidTypeError, \
     OverMinError, OverMaxError, NotNoneError, RegExpError, \
@@ -24,6 +24,14 @@ def black_list(self, opt, value):
     if value in opt.value:
         raise BlackListError(opt, value)
     return value
+
+
+@option
+def convert_type(self, opt, value):
+    type_ = opt.__dict__["value"]
+    if isinstance(value, type_):
+        return value
+    return type_(value)
 
 
 @option("type")
@@ -54,27 +62,31 @@ def size(self, opt, value):
     return value
 
 
-@option
-def match(self, opt, value):
-    if isinstance(opt.value, tuple):
-        regexp = opt.value[0]
-        args = opt.value[1:]
-    else:
-        regexp = opt.value
-        args = []
-    if regexp.match(value, *args):
-        return value
-    raise RegExpError(opt, value)
+class Regexp(Option):
+    def __init__(self, *args):
+        if not len(args):
+            if hasattr(self, "default"):
+                args = self.default
+        arg = args[0]
+        if isinstance(arg, tuple):
+            regexp = arg[0]
+            args = arg[1:]
+        else:
+            regexp = arg
+            args = []
+        self.regexp = regexp
+        self.args = args
 
 
-@option
-def search(self, opt, value):
-    if isinstance(opt.value, tuple):
-        regexp = opt.value[0]
-        args = opt.value[1:]
-    else:
-        regexp = opt.value
-        args = []
-    if regexp.search(value, *args):
-        return value
-    raise RegExpError(opt, value)
+class Match(Regexp):
+    def validate(self, field, value):
+        if self.regexp.match(value, *self.args):
+            return value
+        raise RegExpError(self, value)
+
+
+class Search(Regexp):
+    def validate(self, field, value):
+        if self.regexp.search(value, *self.args):
+            return value
+        raise RegExpError(self, value)
