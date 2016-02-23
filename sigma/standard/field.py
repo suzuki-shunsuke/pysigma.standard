@@ -1,8 +1,5 @@
 import sigma.core as core
 
-from .option import white_list, black_list, type_, length, size, \
-    match, search
-
 
 class Field(core.Field):
     def __validate__(self, value):
