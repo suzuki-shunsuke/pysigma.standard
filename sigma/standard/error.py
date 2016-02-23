@@ -66,12 +66,6 @@ class OverMinError(SizeError):
     pass
 
 
-class NotNoneError(UnitError):
-    """Not None Constraint.
-    """
-    pass
-
-
 class InvalidTypeError(UnitError):
     """Type Constraint.
     """

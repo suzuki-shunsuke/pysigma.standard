@@ -52,16 +52,20 @@ class size(Option):
 
 
 class type_(Option):
-    def __init__(self, type_, is_converted=False):
+    def __init__(self, type_, converted=False, convert=False):
         self.type_ = type_
-        self.is_converted = is_converted
+        self.converted = converted
+        if converted and not convert:
+            self.convert = type_
+        else:
+            self.convert = convert
 
     def __call__(self, field, value):
-        if self.is_converted:
+        if self.converted:
             if isinstance(value, self.type_):
                 return value
             else:
-                return self.type_(value)
+                return self.convert(value)
         else:
             if isinstance(value, self.type_):
                 return value
