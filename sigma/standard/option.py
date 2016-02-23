@@ -1,24 +1,10 @@
 from sigma.core import Option
 from .error import TooLongError, TooShortError, InvalidTypeError, \
-    OverMinError, OverMaxError, NotNoneError, RegExpError, \
+    OverMinError, OverMaxError, RegExpError, \
     WhiteListError, BlackListError
 
 
-class noneable(Option):
-    __option_name__ = "noneable"
-
-    def __init__(self, noneable):
-        self.noneable = noneable
-
-    def __call__(self, field, value):
-        if not self.noneable and value is None:
-            raise NotNoneError(field, self, value)
-        return value
-
-
 class white_list(Option):
-    __option_name__ = "white_list"
-
     def __init__(self, *args):
         self.white_list = args
 
@@ -29,8 +15,6 @@ class white_list(Option):
 
 
 class black_list(Option):
-    __option_name__ = "black_list"
-
     def __init__(self, *args):
         self.black_list = args
 
@@ -41,8 +25,6 @@ class black_list(Option):
 
 
 class length(Option):
-    __option_name__ = "length"
-
     def __init__(self, m=None, M=None):
         self.m = m
         self.M = M
@@ -57,8 +39,6 @@ class length(Option):
 
 
 class size(Option):
-    __option_name__ = "size"
-
     def __init__(self, m=None, M=None):
         self.m = m
         self.M = M
@@ -72,8 +52,6 @@ class size(Option):
 
 
 class type_(Option):
-    __option_name__ = "type_"
-
     def __init__(self, type_, is_converted=False):
         self.type_ = type_
         self.is_converted = is_converted

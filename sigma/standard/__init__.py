@@ -1,6 +1,6 @@
 from .error import LengthError, TooShortError, TooLongError, \
-    SizeError, OverMaxError, OverMinError, NotNoneError, InvalidTypeError, \
+    SizeError, OverMaxError, OverMinError, InvalidTypeError, \
     RegExpError, WhiteListError, BlackListError
 from .field import Field
-from .option import noneable, length, size, type_, white_list, black_list, \
+from .option import length, size, type_, white_list, black_list, \
     search, match
